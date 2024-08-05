@@ -1,0 +1,13 @@
+fastapi==0.103.2
+uvicorn==0.22.0
+SQLAlchemy==2.0.31
+psycopg2==2.9.9
+cryptography==43.0.0
+python-dotenv==0.21.1
+alembic==1.12.1
+pydantic==2.5.3
+slowapi==0.1.9
+httpx==0.24.1
+pytest-cov==4.1.0
+pytest==7.4.4
+uvicorn==0.22.0
