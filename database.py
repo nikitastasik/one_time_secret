@@ -21,11 +21,11 @@ Base = declarative_base()
 
 
 def get_db():
-    session = SessionLocal()
+    db_session = SessionLocal()
     try:
-        yield session
+        yield db_session
     finally:
-        session.close()
+        db_session.close()
 
 
 def init_db():
