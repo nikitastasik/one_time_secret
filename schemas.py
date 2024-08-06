@@ -8,3 +8,7 @@ class SecretCreate(BaseModel):
 
 class SecretResponse(BaseModel):
     secret_key: str
+
+
+class Passphrase(BaseModel):
+    passphrase: str

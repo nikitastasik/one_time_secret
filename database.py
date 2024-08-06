@@ -21,8 +21,20 @@ Base = declarative_base()
 
 
 def get_db():
-    db = SessionLocal()
+    session = SessionLocal()
     try:
-        yield db
+        yield session
     finally:
-        db.close()
+        session.close()
+
+
+def init_db():
+    """
+    Инициализация базы данных: создание всех таблиц, если их нет.
+    """
+    Base.metadata.create_all(bind=engine)
+
+
+# Вызов инициализации базы данных при запуске модуля
+if __name__ == "__main__":
+    init_db()
