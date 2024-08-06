@@ -1,4 +1,4 @@
-from main import app, get_remote_address
+from app.main import app, get_remote_address
 from slowapi import Limiter
 
 COUNT_LIMIT = 10

@@ -2,9 +2,9 @@ import os
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base
-from database import get_db
-from main import app
+from app.models import Base
+from app.database import get_db
+from app.main import app
 from fastapi.testclient import TestClient
 
 # Используем SQLite в файле для тестирования

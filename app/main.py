@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.orm import Session
-import models
-import schemas
-import database
+from app import models
+from app import schemas
+from app import database
 from slowapi import Limiter
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
