@@ -63,7 +63,6 @@ DATABASE_HOST=localhost
 DATABASE_PORT=5432
 DATABASE_NAME=your_database_name
 RATE_LIMIT=600
-ENCRYPTION_KEY=your_encryption_key
 ```
 
 ### Настройте базу данных:
@@ -84,7 +83,7 @@ CREATE DATABASE your_database_name;
 uvicorn main:app --reload
 ```
 
-API будет доступен по адресу `http://localhost:8000`.
+API будет доступен по адресу `http://127.0.0.1:8000`.
 
 ## 3. Запуск проекта с Docker
 
@@ -99,7 +98,6 @@ DATABASE_HOST=db
 DATABASE_PORT=5432
 DATABASE_NAME=your_database_name
 RATE_LIMIT=600
-ENCRYPTION_KEY=your_encryption_key
 ```
 
 ### Соберите и запустите контейнеры:

@@ -12,6 +12,7 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 @pytest.fixture(scope="function")
 def db_session():
     """Фикстура для очистки базы данных перед каждым тестом."""
@@ -19,9 +20,10 @@ def db_session():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
-    db = TestingSessionLocal()
-    yield db
-    db.close()
+    db_session = TestingSessionLocal()
+    yield db_session
+    db_session.close()
+
 
 @pytest.fixture(scope="function")
 def client(db_session):
