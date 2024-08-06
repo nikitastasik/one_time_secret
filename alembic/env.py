@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
-from models import Base
+from app.models import Base
 
 # Загрузка переменных окружения из файла .env
 load_dotenv()
@@ -17,7 +17,7 @@ db_name = os.getenv("DATABASE_NAME")
 
 # Формирование строки подключения
 DATABASE_URL = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-
+print(DATABASE_URL)
 # Настройка Alembic
 config = context.config
 
