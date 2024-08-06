@@ -43,6 +43,7 @@ app.add_middleware(SlowAPIMiddleware)
 # Инициализация базы данных
 models.Base.metadata.create_all(bind=database.engine)
 
+
 @app.post(
     "/generate",
     response_model=schemas.SecretResponse,
