@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.exceptions import RequestValidationError
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 import models
 import schemas
@@ -41,22 +40,8 @@ app.add_exception_handler(RateLimitExceeded, lambda request, exc: JSONResponse(
 # Добавление middleware для применения лимитов
 app.add_middleware(SlowAPIMiddleware)
 
-# Генерация ключа шифрования
-ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY", "").encode()
-
 # Инициализация базы данных
 models.Base.metadata.create_all(bind=database.engine)
-
-
-# Модели для входящих данных
-class SecretCreate(BaseModel):
-    secret: str
-    passphrase: str
-
-
-class Passphrase(BaseModel):
-    passphrase: str
-
 
 @app.post(
     "/generate",
@@ -70,22 +55,21 @@ class Passphrase(BaseModel):
 @limiter.limit(f"{RATE_LIMIT}/minute")
 async def generate_secret(
     request: Request,
-    secret_create: SecretCreate,
-    db: Session = Depends(database.get_db)
+    secret_create: schemas.SecretCreate,
+    db_session: Session = Depends(database.get_db)
 ) -> dict:
     """
     Генерирует уникальный ключ для одноразового секрета.
 
     :param request: HTTP запрос. Нужен для корректной работы slowapi.
     :param secret_create: Модель данных с секретом и кодовой фразой.
-    :param db: Сессия базы данных.
+    :param db_session: Сессия базы данных.
     :return: Словарь с ключом секрета.
     """
     secret_key = models.Secret.create_secret(
-        db=db,
+        db_session=db_session,
         secret=secret_create.secret,
-        passphrase=secret_create.passphrase,
-        encryption_key=ENCRYPTION_KEY
+        passphrase=secret_create.passphrase
     )
     return {"secret_key": secret_key}
 
@@ -102,8 +86,8 @@ async def generate_secret(
 async def get_secret(
     request: Request,
     secret_key: str,
-    passphrase: Passphrase,
-    db: Session = Depends(database.get_db)
+    passphrase: schemas.Passphrase,
+    db_session: Session = Depends(database.get_db)
 ) -> dict:
     """
     Возвращает секрет по переданному ключу и кодовой фразе.
@@ -111,14 +95,13 @@ async def get_secret(
     :param request: HTTP запрос. Нужен для корректной работы slowapi.
     :param secret_key: Уникальный ключ секрета.
     :param passphrase: Кодовая фраза для доступа к секрету.
-    :param db: Сессия базы данных.
+    :param db_session: Сессия базы данных.
     :return: Словарь с расшифрованным секретом или сообщение об ошибке.
     """
     secret = models.Secret.get_secret(
-        db=db,
+        db_session=db_session,
         secret_key=secret_key,
-        passphrase=passphrase.passphrase,
-        encryption_key=ENCRYPTION_KEY
+        passphrase=passphrase.passphrase
     )
     if secret is None:
         raise HTTPException(status_code=404, detail="Secret not found or invalid passphrase")
@@ -126,7 +109,6 @@ async def get_secret(
     return {"secret": secret}
 
 # Обработчики исключений
-
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
