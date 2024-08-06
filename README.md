@@ -80,7 +80,7 @@ CREATE DATABASE your_database_name;
 ### Запустите приложение:
 
 ```bash
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 API будет доступен по адресу `http://127.0.0.1:8000`.

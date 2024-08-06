@@ -17,7 +17,7 @@ db_name = os.getenv("DATABASE_NAME")
 
 # Формирование строки подключения
 DATABASE_URL = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-print(DATABASE_URL)
+
 # Настройка Alembic
 config = context.config
 
